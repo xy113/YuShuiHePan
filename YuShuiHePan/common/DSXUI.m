@@ -43,6 +43,9 @@
         case DSXBarButtonStyleAdd:
             imageName = @"icon-add.png";
             break;
+        case DSXBarButtonStyleRefresh:
+            imageName = @"icon-refresh.png";
+            break;
         default:
             break;
     }

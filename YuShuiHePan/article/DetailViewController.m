@@ -24,6 +24,7 @@
     self.navigationItem.rightBarButtonItems = @[shareButtonItem,favorButtonItem,likeButtonItem];
     
     self.webView = [[UIWebView alloc] initWithFrame:self.view.frame];
+    self.webView.backgroundColor = BGCOLOR;
     [self.view addSubview:self.webView];
     
     self.operationQueue = [[NSOperationQueue alloc] init];

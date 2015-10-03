@@ -8,8 +8,7 @@
 
 #import "AppDelegate.h"
 #import "HomeViewController.h"
-#import "NewViewController.h"
-#import "TingViewController.h"
+#import "WxyhViewController.h"
 #import "FollowViewController.h"
 #import "MyViewController.h"
 #import "DSXNavigationController.h"
@@ -27,28 +26,26 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = BGCOLOR;
     
+    [NSThread sleepForTimeInterval:3];
+    
     HomeViewController *homeController = [[HomeViewController alloc] init];
     DSXNavigationController *navHome = [[DSXNavigationController alloc] initWithRootViewController:homeController];
-    [navHome setTabBarItem:[self tabBarItemWithTitle:@"栏目" image:@"icon-home.png" selectedImage:@"icon-homefill.png"]];
+    [navHome setTabBarItem:[self tabBarItemWithTitle:@"玉水文学" image:@"icon-collect.png" selectedImage:@"icon-collectfill.png"]];
     
-    NewViewController *newController = [[NewViewController alloc] init];
-    DSXNavigationController *navNew = [[DSXNavigationController alloc] initWithRootViewController:newController];
-    [navNew setTabBarItem:[self tabBarItemWithTitle:@"最新" image:@"icon-time.png" selectedImage:@"icon-timefill.png"]];
+    WxyhViewController *wxyhController = [[WxyhViewController alloc] init];
+    DSXNavigationController *navWxyh = [[DSXNavigationController alloc] initWithRootViewController:wxyhController];
+    [navWxyh setTabBarItem:[self tabBarItemWithTitle:@"温馨夜话" image:@"icon-radiobox.png" selectedImage:@"icon-radioboxfill.png"]];
     
-//    TingViewController *tingController = [[TingViewController alloc] init];
-//    DSXNavigationController *navTing = [[DSXNavigationController alloc] initWithRootViewController:tingController];
-//    UITabBarItem *barItemTing = [self tabBarItemWithTitle:@"听" image:@"icon-friend.png" selectedImage:@"icon-friendfill.png"];
-//    [navTing setTabBarItem:barItemTing];
     FollowViewController *followController = [[FollowViewController alloc] init];
     DSXNavigationController *navFollow = [[DSXNavigationController alloc] initWithRootViewController:followController];
     [navFollow setTabBarItem:[self tabBarItemWithTitle:@"关注" image:@"icon-friend.png" selectedImage:@"icon-friendfill.png"]];
     
     MyViewController *myController = [[MyViewController alloc] init];
     DSXNavigationController *navMy = [[DSXNavigationController alloc] initWithRootViewController:myController];
-    [navMy setTabBarItem:[self tabBarItemWithTitle:@"我" image:@"icon-people.png" selectedImage:@"icon-peoplefill.png"]];
+    [navMy setTabBarItem:[self tabBarItemWithTitle:@"个人中心" image:@"icon-people.png" selectedImage:@"icon-peoplefill.png"]];
     
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    [tabBarController setViewControllers:@[navHome,navNew,navFollow,navMy]];
+    [tabBarController setViewControllers:@[navHome,navWxyh,navMy]];
     [tabBarController.tabBar setBackgroundColor:TABBGCOLOR];
     self.window.rootViewController = tabBarController;
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateNormal];

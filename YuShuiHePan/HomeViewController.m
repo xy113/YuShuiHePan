@@ -16,7 +16,7 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     [self setTitle:@"玉水河畔"];
-    [self.navigationController.tabBarItem setTitle:@"栏目"];
+    [self.navigationController.tabBarItem setTitle:@"玉水文苑"];
     [self.view setBackgroundColor:BGCOLOR];
     
     UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"登录" style:UIBarButtonItemStylePlain target:self action:@selector(showLogin)];

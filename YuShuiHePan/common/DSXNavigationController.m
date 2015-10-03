@@ -30,6 +30,6 @@
 - (void)setup{
     [self.navigationBar setHidden:NO];
     [self.navigationBar setBarStyle:UIBarStyleBlack];
-    [self.navigationBar setBackgroundImage:[UIImage imageNamed:@"pink.png"] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationBar setBackgroundImage:[UIImage imageNamed:@"orange.png"] forBarMetrics:UIBarMetricsDefault];
 }
 @end

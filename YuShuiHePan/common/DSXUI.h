@@ -14,7 +14,8 @@ typedef enum {
     DSXBarButtonStyleAdd,
     DSXBarButtonStyleLike,
     DSXBarButtonStyleShare,
-    DSXBarButtonStyleFavorite
+    DSXBarButtonStyleFavorite,
+    DSXBarButtonStyleRefresh
 }DSXBarButtonStyle;
 
 @interface DSXUI : NSObject
