@@ -7,7 +7,7 @@
 //
 
 #import "DetailViewController.h"
-#import "Common.h"
+#import "DSXCommon.h"
 
 @implementation DetailViewController
 @synthesize aid;

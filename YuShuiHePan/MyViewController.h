@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyViewController : UIViewController
+@interface MyViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 
+@property(nonatomic,retain)UITableView *mainTableView;
+@property(nonatomic,retain)UIImageView *avatarView;
 @end

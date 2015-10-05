@@ -16,6 +16,7 @@
 #define SHEIGHT [UIScreen mainScreen].bounds.size.height
 
 #define BGCOLOR [UIColor colorWithPatternImage:[UIImage imageNamed:@"white.png"]]
+#define BGCOLORGRAY [UIColor colorWithPatternImage:[UIImage imageNamed:@"gray.png"]]
 #define NAVBGCOLOR [UIColor colorWithPatternImage:[UIImage imageNamed:@"pink.png"]]
 #define TABBGCOLOR [UIColor colorWithPatternImage:[UIImage imageNamed:@"tabbg.png"]]
 

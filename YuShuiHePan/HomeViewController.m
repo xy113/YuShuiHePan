@@ -9,7 +9,8 @@
 #import "HomeViewController.h"
 #import "ListViewController.h"
 #import "LoginViewController.h"
-#import "Common.h"
+#import "DSXNavigationController.h"
+#import "DSXCommon.h"
 
 @implementation HomeViewController
 
@@ -25,10 +26,11 @@
     self.categoryList = [[NSUserDefaults standardUserDefaults] arrayForKey:@"categorylist"];
     if (!self.categoryList) {
         NSString *urlString = [SITEAPI stringByAppendingString:@"&ac=category"];
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
+        NSData *data = [[DSXUtil sharedUtil] dataWithURL:urlString];
         id array = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         if ([array isKindOfClass:[NSArray class]]) {
             self.categoryList = array;
+            [[NSUserDefaults standardUserDefaults] setObject:self.categoryList forKey:@"categorylist"];
         }
     }
     
@@ -40,7 +42,8 @@
 
 - (void)showLogin{
     LoginViewController *loginController = [[LoginViewController alloc] init];
-    [self presentViewController:loginController animated:YES completion:nil];
+    DSXNavigationController *navigationController = [[DSXNavigationController alloc] initWithRootViewController:loginController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

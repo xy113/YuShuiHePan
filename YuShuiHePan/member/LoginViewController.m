@@ -9,7 +9,7 @@
 #import "LoginViewController.h"
 #import "DSXNavigationController.h"
 #import "RegisterViewController.h"
-#import "Common.h"
+#import "DSXCommon.h"
 
 @implementation LoginViewController
 @synthesize usernameField;
@@ -18,7 +18,10 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"pink.png"]]];
+    [self setTitle:@"登录"];
+    [self.view setBackgroundColor:BGCOLORGRAY];
+    self.navigationItem.leftBarButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleBack target:self action:@selector(clickBack)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"注册" style:UIBarButtonItemStylePlain target:self action:@selector(showRegister)];
     
     UIView *inputView;
     CGRect frame;
@@ -27,7 +30,7 @@
     self.usernameField.delegate = self;
     self.usernameField.placeholder = @"请输入用户名或手机号:";
     self.usernameField.returnKeyType = UIReturnKeyDone;
-    frame = CGRectMake(20, 80, SWIDTH-40, 50);
+    frame = CGRectMake(20, 60, SWIDTH-40, 50);
     inputView = [self inputViewWithFrame:frame Image:@"icon-username.png" textField:self.usernameField];
     [self.view addSubview:inputView];
     
@@ -36,12 +39,13 @@
     self.passwordField.placeholder = @"请输入密码:";
     self.passwordField.secureTextEntry = YES;
     self.passwordField.returnKeyType = UIReturnKeyDone;
-    frame = CGRectMake(20, 140, SWIDTH-40, 50);
+    frame = CGRectMake(20, 120, SWIDTH-40, 50);
     inputView = [self inputViewWithFrame:frame Image:@"icon-lock.png" textField:self.passwordField];
     [self.view addSubview:inputView];
     
     self.loginButton = [self buttonWithTitle:@"登录"];
     self.loginButton.frame = CGRectMake(20, 210, SWIDTH-40, 50);
+    self.loginButton.layer.borderColor = [UIColor colorWithRed:0.05 green:0.38 blue:0.50 alpha:1.00].CGColor;
     [self.loginButton setBackgroundColor:[UIColor colorWithRed:0.05 green:0.38 blue:0.50 alpha:1.00]];
     [self.loginButton setBackgroundImage:[UIImage imageNamed:@"loginbuttonbg.png"] forState:UIControlStateHighlighted];
     [self.loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -68,6 +72,8 @@
     UIButton *button = [[UIButton alloc] init];
     button.layer.cornerRadius = 5.0;
     button.layer.masksToBounds = YES;
+    button.layer.borderWidth = 1;
+    button.layer.borderColor = [UIColor colorWithRed:0.81 green:0.80 blue:0.81 alpha:1.00].CGColor;
     [button setTitle:title forState:UIControlStateNormal];
     return button;
 }
@@ -87,7 +93,13 @@
     view.layer.cornerRadius = 5.0;
     view.layer.masksToBounds = YES;
     view.backgroundColor = [UIColor whiteColor];
+    view.layer.borderWidth = 1;
+    view.layer.borderColor = [UIColor colorWithRed:0.81 green:0.80 blue:0.81 alpha:1.00].CGColor;
     return view;
+}
+
+- (void)clickBack{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)cancel{
@@ -96,7 +108,7 @@
 
 - (void)showRegister{
     RegisterViewController *registerController = [[RegisterViewController alloc] init];
-    [self presentViewController:registerController animated:YES completion:nil];
+    [self.navigationController pushViewController:registerController animated:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{

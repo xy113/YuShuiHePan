@@ -7,7 +7,7 @@
 //
 
 #import "WxyhPlayViewController.h"
-#import "Common.h"
+#import "DSXCommon.h"
 
 @implementation WxyhPlayViewController
 @synthesize ID;

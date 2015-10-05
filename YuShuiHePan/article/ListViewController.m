@@ -8,7 +8,7 @@
 
 #import "ListViewController.h"
 #import "DetailViewController.h"
-#import "Common.h"
+#import "DSXCommon.h"
 
 @implementation ListViewController
 @synthesize catid;
@@ -25,8 +25,10 @@
     self.mainTableView.pageSize = 20;
     [self.view addSubview:self.mainTableView];
     
+    _keyName = [NSString stringWithFormat:@"article_list_%ld",(long)self.catid];
+    [self reloadTableViewWithData:[[NSUserDefaults standardUserDefaults] dataForKey:_keyName]];
+    
     self.operationQueue = [[NSOperationQueue alloc] init];
-    [self.mainTableView reloadTableViewWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"list"]];
     [self.mainTableView.waitingView startAnimating];
     [self tableViewStartRefreshing];
 }
@@ -34,12 +36,15 @@
 - (void)downloadData{
     [self.operationQueue addOperationWithBlock:^{
         NSString *urlString = [SITEAPI stringByAppendingFormat:@"&ac=list&catid=%d&page=%d",(int)self.catid,_page];
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
+        NSData *data = [[DSXUtil sharedUtil] dataWithURL:urlString];
         [self performSelectorOnMainThread:@selector(reloadTableViewWithData:) withObject:data waitUntilDone:YES];
     }];
 }
 
 - (void)reloadTableViewWithData:(NSData *)data{
+    if ([data length]>2 && self.mainTableView.isRefreshing) {
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:_keyName];
+    }
     [self.mainTableView reloadTableViewWithData:data];
 }
 

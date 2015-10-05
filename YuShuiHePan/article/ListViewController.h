@@ -12,6 +12,7 @@
 @interface ListViewController : UIViewController<DSXTableViewDelegate>{
     @private
     int _page;
+    NSString *_keyName;
 }
 
 @property(nonatomic,assign)NSInteger catid;
