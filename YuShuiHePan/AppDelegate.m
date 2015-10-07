@@ -26,14 +26,13 @@
     self.window.backgroundColor = BGCOLOR;
     
     [NSThread sleepForTimeInterval:2];
-    
     HomeViewController *homeController = [[HomeViewController alloc] init];
     DSXNavigationController *navHome = [[DSXNavigationController alloc] initWithRootViewController:homeController];
     [navHome setTabBarItem:[self tabBarItemWithTitle:@"玉水文学" image:@"icon-collect.png" selectedImage:@"icon-collectfill.png"]];
     
     WxyhViewController *wxyhController = [[WxyhViewController alloc] init];
     DSXNavigationController *navWxyh = [[DSXNavigationController alloc] initWithRootViewController:wxyhController];
-    [navWxyh setTabBarItem:[self tabBarItemWithTitle:@"温馨夜话" image:@"icon-radiobox.png" selectedImage:@"icon-radioboxfill.png"]];
+    [navWxyh setTabBarItem:[self tabBarItemWithTitle:@"温馨夜话" image:@"icon-we.png" selectedImage:@"icon-wefill.png"]];
     
     MyViewController *myController = [[MyViewController alloc] init];
     DSXNavigationController *navMy = [[DSXNavigationController alloc] initWithRootViewController:myController];

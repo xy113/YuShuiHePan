@@ -58,8 +58,10 @@
                 NSMutableDictionary *userstatus = [NSMutableDictionary dictionaryWithDictionary:ucresult];
                 NSString *username = [userstatus objectForKey:@"username"];
                 NSInteger uid = [[userstatus objectForKey:@"uid"] intValue];
-                NSURL *dataURL = [NSURL URLWithString:[userstatus objectForKey:@"userpic"]];
-                [userstatus setObject:[NSData dataWithContentsOfURL:dataURL] forKey:@"avatar"];
+                NSData *avatarData = [[DSXUtil sharedUtil] dataWithURL:[userstatus objectForKey:@"userpic"]];
+                if (avatarData) {
+                    [userstatus setObject:avatarData forKey:@"avatar"];
+                }
                 
                 if (uid>0 && username) {
                     self.isLogined = YES;

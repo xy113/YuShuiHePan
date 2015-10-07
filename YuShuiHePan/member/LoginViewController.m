@@ -9,7 +9,6 @@
 #import "LoginViewController.h"
 #import "DSXNavigationController.h"
 #import "RegisterViewController.h"
-#import "DSXCommon.h"
 
 @implementation LoginViewController
 @synthesize usernameField;
@@ -23,12 +22,13 @@
     self.navigationItem.leftBarButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleBack target:self action:@selector(clickBack)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"注册" style:UIBarButtonItemStylePlain target:self action:@selector(showRegister)];
     
+    self.userStatus = [[DSXUserStatus alloc] init];
     UIView *inputView;
     CGRect frame;
     
     self.usernameField = [[UITextField alloc] init];
     self.usernameField.delegate = self;
-    self.usernameField.placeholder = @"请输入用户名或手机号:";
+    self.usernameField.placeholder = @"用户名/邮箱/手机号:";
     self.usernameField.returnKeyType = UIReturnKeyDone;
     frame = CGRectMake(20, 60, SWIDTH-40, 50);
     inputView = [self inputViewWithFrame:frame Image:@"icon-username.png" textField:self.usernameField];
@@ -49,6 +49,7 @@
     [self.loginButton setBackgroundColor:[UIColor colorWithRed:0.05 green:0.38 blue:0.50 alpha:1.00]];
     [self.loginButton setBackgroundImage:[UIImage imageNamed:@"loginbuttonbg.png"] forState:UIControlStateHighlighted];
     [self.loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.loginButton addTarget:self action:@selector(checkLogin) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.loginButton];
     
     UIButton *registerButton = [self buttonWithTitle:@"注册新账号"];
@@ -109,6 +110,35 @@
 - (void)showRegister{
     RegisterViewController *registerController = [[RegisterViewController alloc] init];
     [self.navigationController pushViewController:registerController animated:YES];
+}
+
+- (void)checkLogin{
+    [self.view endEditing:YES];
+    NSString *username = self.usernameField.text;
+    NSString *password = self.passwordField.text;
+    if ([username length] < 2) {
+        [[DSXUI sharedUI] showPopInView:self.navigationController.view Message:@"账号输入错误"];
+        return;
+    }
+    
+    if ([password length] < 6) {
+        [[DSXUI sharedUI] showPopInView:self.navigationController.view Message:@"密码输入错误"];
+        return;
+    }
+    UIView *waiting = [[DSXUI sharedUI] showLoadingInView:self.navigationController.view Message:@"正在登录,请稍后.."];
+    [self.userStatus loginWithName:username andPassword:password];
+    if (self.userStatus.uid && self.userStatus.username) {
+        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(loginSuccess:) userInfo:waiting repeats:NO];
+    }else {
+        [waiting removeFromSuperview];
+        [[DSXUI sharedUI] showPopInView:self.navigationController.view Message:@"账号和密码不匹配"];
+    }
+}
+
+- (void)loginSuccess:(NSTimer *)timer{
+    UIView *view = [timer userInfo];
+    [view removeFromSuperview];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{

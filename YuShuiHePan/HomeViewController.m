@@ -65,7 +65,7 @@
     }
     NSDictionary *category = [[self.categoryList[indexPath.section] objectForKey:@"childs"] objectAtIndex:indexPath.row];
     cell.textLabel.text = [category objectForKey:@"cname"];
-    cell.textLabel.font = [UIFont systemFontOfSize:18.0];
+    cell.textLabel.font = [UIFont fontWithName:DSXFontStyleDemilight size:18.0];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
@@ -92,7 +92,7 @@
     UIView *view = [[UIView alloc] init];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(15, 15, 0, 0)];
     label.text = [self.categoryList[section] objectForKey:@"cname"];
-    label.font = [UIFont systemFontOfSize:18.0 weight:600];
+    label.font = [UIFont fontWithName:DSXFontStyleBold size:18.0];
     [label sizeToFit];
     [view addSubview:label];
     return view;

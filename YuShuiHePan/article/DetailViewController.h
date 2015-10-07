@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CommentView.h"
+#import "DSXCommon.h"
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UIViewController<UIWebViewDelegate>
 
 @property(nonatomic,assign)NSInteger aid;
-@property(nonatomic,retain)UIWebView *webView;
-@property(nonatomic,retain)NSOperationQueue *operationQueue;
+@property(nonatomic,retain)UIScrollView *scrollVew;
+@property(nonatomic,retain)UIWebView *contentWebView;
+@property(nonatomic,retain)UIWebView *commentWebView;
+@property(nonatomic,retain)CommentView *commentView;
 
 @end
