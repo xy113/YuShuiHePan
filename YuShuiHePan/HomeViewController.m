@@ -16,12 +16,11 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self setTitle:@"玉水河畔"];
-    [self.navigationController.tabBarItem setTitle:@"玉水文苑"];
+    [self setTitle:@"玉水文苑"];
     [self.view setBackgroundColor:BGCOLOR];
     
-    UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"登录" style:UIBarButtonItemStylePlain target:self action:@selector(showLogin)];
-    self.navigationItem.rightBarButtonItem = rightButtonItem;
+//    UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"登录" style:UIBarButtonItemStylePlain target:self action:@selector(showLogin)];
+//    self.navigationItem.rightBarButtonItem = rightButtonItem;
     
     self.categoryList = [[NSUserDefaults standardUserDefaults] arrayForKey:@"categorylist"];
     if (!self.categoryList) {

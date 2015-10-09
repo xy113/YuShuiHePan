@@ -7,7 +7,6 @@
 //
 
 #import "RegisterViewController.h"
-#import "DSXCommon.h"
 
 @implementation RegisterViewController
 @synthesize usernameField;
@@ -61,6 +60,7 @@
     [self.registerButton setBackgroundColor:[UIColor colorWithRed:0.05 green:0.38 blue:0.50 alpha:1.00]];
     [self.registerButton setBackgroundImage:[UIImage imageNamed:@"loginbuttonbg.png"] forState:UIControlStateHighlighted];
     [self.registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.registerButton addTarget:self action:@selector(sendRegister) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.registerButton];
     
     UIButton *cancelButton = [self buttonWithTitle:@"取消"];
@@ -108,6 +108,48 @@
 
 - (void)cancel{
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)sendRegister{
+    NSString *username = self.usernameField.text;
+    NSString *mobile = self.mobileField.text;
+    NSString *password = self.passwordField.text;
+    if ([username length] < 2) {
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDefault Message:@"用户名错误"];
+        return;
+    }
+    
+    if ([mobile length] != 11) {
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDefault Message:@"手机号码错误"];
+        return;
+    }
+    
+    if ([password length] < 6) {
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDefault Message:@"密码错误，至少6位"];
+        return;
+    }
+    
+    if (username && mobile && password) {
+        UIView *loading = [[DSXUI sharedUI] showLoadingViewWithMessage:@"注册中..."];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:username forKey:@"username"];
+        [params setObject:mobile forKey:@"mobile"];
+        [params setObject:password forKey:@"password"];
+        NSData *data = [[DSXUtil sharedUtil] sendDataForURL:[SITEAPI stringByAppendingString:@"&ac=register"] params:params];
+        id userInfo = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        if ([userInfo isKindOfClass:[NSDictionary class]]) {
+            NSInteger uid = [[userInfo objectForKey:@"uid"] intValue];
+            if (uid > 0) {
+                DSXUserStatus *userStatus = [[DSXUserStatus alloc] init];
+                [userStatus loginWithName:username andPassword:password];
+                [loading removeFromSuperview];
+                [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDone Message:@"注册成功"];
+                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(cancel) userInfo:nil repeats:NO];
+            }else {
+                
+            }
+        }
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{

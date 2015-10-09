@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "DSXCommon.h"
+@protocol CommentViewDelegate<NSObject>
+@optional
+- (void)sendComment;
+@end
 
 @interface CommentView : UIView<UITextViewDelegate>{
     @private
@@ -16,11 +20,11 @@
     CGRect _frame;
 }
 
-@property(nonatomic,assign)NSInteger aid;
 @property(nonatomic,retain)UIView *postView;
 @property(nonatomic,retain)UITextView *textView;
 @property(nonatomic,retain)UIButton *sendButton;
 @property(nonatomic,retain)UIView *modalView;
+@property(nonatomic,assign)id<CommentViewDelegate>delegate;
 
 - (instancetype)init;
 - (void)show;

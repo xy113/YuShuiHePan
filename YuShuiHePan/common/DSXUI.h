@@ -18,6 +18,13 @@ typedef enum {
     DSXBarButtonStyleRefresh
 }DSXBarButtonStyle;
 
+typedef NS_ENUM(NSInteger,DSXPopViewStyle){
+    DSXPopViewStyleDefault,
+    DSXPopViewStyleWarning,
+    DSXPopViewStyleDone,
+    DSXPopViewStyleError
+};
+
 @interface DSXUI : NSObject
 
 + (instancetype)sharedUI;
@@ -25,7 +32,8 @@ typedef enum {
 - (UIBarButtonItem *)barButtonWithImage:(NSString *)imageName target:(id)target action:(SEL)action;
 - (UIBarButtonItem *)barButtonWithStyle:(DSXBarButtonStyle)style target:(id)target action:(SEL)action;
 
-- (void)showPopInView:(UIView *)view Message:(NSString *)message;
-- (UIView *)showLoadingInView:(UIView *)view Message:(NSString *)message;
+- (void)showPopViewWithStyle:(DSXPopViewStyle)style Message:(NSString *)message;
+- (UIView *)showLoadingViewWithMessage:(NSString *)message;
+
 
 @end

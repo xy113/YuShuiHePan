@@ -12,6 +12,7 @@
 @synthesize catid;
 @synthesize titleTextField;
 @synthesize contentTextView;
+@synthesize userStatus;
 
 - (void)viewDidLoad{
     [super viewDidLoad];
@@ -19,7 +20,9 @@
     [self.view setBackgroundColor:BGCOLORGRAY];
     
     self.navigationItem.leftBarButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleBack target:self action:@selector(back)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发布" style:UIBarButtonItemStylePlain target:self action:@selector(send)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(endEdit)];
+    
+    self.userStatus = [[DSXUserStatus alloc] init];
     UIView *titleWrap = [[UIView alloc] initWithFrame:CGRectMake(0, 10, SWIDTH, 50)];
     [titleWrap setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:titleWrap];
@@ -51,6 +54,16 @@
     [self.contentTextView addSubview:_contentPlaceHolder];
     [contentWrap addSubview:self.contentTextView];
     
+    UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 300, SWIDTH-20, 50)];
+    sendButton.layer.cornerRadius = 5.0;
+    sendButton.layer.masksToBounds = YES;
+    sendButton.backgroundColor = [UIColor redColor];
+    [sendButton setTitle:@"发布" forState:UIControlStateNormal];
+    [sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [sendButton setBackgroundImage:[UIImage imageNamed:@"orange.png"] forState:UIControlStateHighlighted];
+    [sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:sendButton];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -59,8 +72,39 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)endEdit{
+    [self.view endEditing:YES];
+}
+
 - (void)send{
     [self.view endEditing:YES];
+    NSString *title = self.titleTextField.text;
+    NSString *content = self.contentTextView.text;
+    if ([title length] < 1) {
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDefault Message:@"标题不能为空"];
+        return;
+    }
+    
+    if ([content length] < 1) {
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDefault Message:@"内容不能为空"];
+        return;
+    }
+    
+    if (title && content) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:@(self.catid) forKey:@"catid"];
+        [params setObject:@(self.userStatus.uid) forKey:@"uid"];
+        [params setObject:self.userStatus.username forKey:@"username"];
+        [params setObject:title forKey:@"title"];
+        [params setObject:content forKey:@"content"];
+        NSData *data = [[DSXUtil sharedUtil] sendDataForURL:[SITEAPI stringByAppendingString:@"&ac=post&op=publish"] params:params];
+        if ([data length] > 0) {
+            [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDone Message:@"发布成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        }else {
+            [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleError Message:@"系统错误"];
+        }
+    }
 }
 
 - (void)textViewDidChange:(UITextView *)textView{

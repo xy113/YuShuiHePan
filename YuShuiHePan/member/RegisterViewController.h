@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DSXCommon.h"
+#import "DSXUserStatus.h"
 
 @interface RegisterViewController : UIViewController<UITextFieldDelegate>
 

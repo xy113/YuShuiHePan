@@ -117,21 +117,21 @@
     NSString *username = self.usernameField.text;
     NSString *password = self.passwordField.text;
     if ([username length] < 2) {
-        [[DSXUI sharedUI] showPopInView:self.navigationController.view Message:@"账号输入错误"];
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleError Message:@"账号输入错误"];
         return;
     }
     
     if ([password length] < 6) {
-        [[DSXUI sharedUI] showPopInView:self.navigationController.view Message:@"密码输入错误"];
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleError Message:@"密码输入错误"];
         return;
     }
-    UIView *waiting = [[DSXUI sharedUI] showLoadingInView:self.navigationController.view Message:@"正在登录,请稍后.."];
+    UIView *waiting = [[DSXUI sharedUI] showLoadingViewWithMessage:@"正在登录,请稍后.."];
     [self.userStatus loginWithName:username andPassword:password];
     if (self.userStatus.uid && self.userStatus.username) {
         [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(loginSuccess:) userInfo:waiting repeats:NO];
     }else {
         [waiting removeFromSuperview];
-        [[DSXUI sharedUI] showPopInView:self.navigationController.view Message:@"账号和密码不匹配"];
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleError Message:@"账号和密码不匹配"];
     }
 }
 

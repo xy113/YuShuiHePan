@@ -52,9 +52,25 @@
     return [self barButtonWithImage:imageName target:target action:action];
 }
 
-- (void)showPopInView:(UIView *)view Message:(NSString *)message{
+- (void)showPopViewWithStyle:(DSXPopViewStyle)style Message:(NSString *)message{
+    NSString *imageName;
+    switch (style) {
+        case DSXPopViewStyleDone:
+            imageName = @"icon-done.png";
+            break;
+        case DSXPopViewStyleError:
+            imageName = @"icon-error.png";
+            break;
+        case DSXPopViewStyleWarning:
+            imageName = @"icon-warn.png";
+            break;
+        default:
+            imageName = @"icon-info.png";
+            break;
+    }
+    
     UIView *popView = [[UIView alloc] init];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-info.png"]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
     [imageView setContentMode:UIViewContentModeScaleToFill];
     [popView addSubview:imageView];
     
@@ -68,17 +84,18 @@
     popView.backgroundColor = [UIColor blackColor];
     popView.layer.cornerRadius = 5.0;
     popView.layer.masksToBounds = YES;
-    popView.frame = CGRectMake(0, 0, label.frame.size.width+20, label.frame.size.height+67);
+    popView.frame = CGRectMake(0, 0, label.frame.size.width+30, label.frame.size.height+67);
     popView.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.height/2);
     
     [imageView setFrame:CGRectMake((popView.frame.size.width-32)/2, 10, 32, 32)];
     
     CGRect frame;
     frame = label.frame;
-    frame.origin.x = 10;
+    frame.origin.x = 15;
     frame.origin.y = 52;
     [label setFrame:frame];
-    [view addSubview:popView];
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    [window addSubview:popView];
     [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(hidePopView:) userInfo:popView repeats:NO];
 }
 
@@ -87,7 +104,7 @@
     [popView removeFromSuperview];
 }
 
-- (UIView *)showLoadingInView:(UIView *)view Message:(NSString *)message{
+- (UIView *)showLoadingViewWithMessage:(NSString *)message{
     UIView *popView = [[UIView alloc] init];
     UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [popView addSubview:indicatorView];
@@ -103,16 +120,17 @@
     popView.backgroundColor = [UIColor blackColor];
     popView.layer.cornerRadius = 5.0;
     popView.layer.masksToBounds = YES;
-    popView.frame = CGRectMake(0, 0, label.frame.size.width+20, label.frame.size.height+67);
+    popView.frame = CGRectMake(0, 0, label.frame.size.width+30, label.frame.size.height+67);
     popView.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.height/2);
     
     [indicatorView setFrame:CGRectMake((popView.frame.size.width-40)/2, 10, 40, 40)];
     CGRect frame;
     frame = label.frame;
-    frame.origin.x = 10;
+    frame.origin.x = 15;
     frame.origin.y = 52;
     [label setFrame:frame];
-    [view addSubview:popView];
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    [window addSubview:popView];
     return popView;
 }
 

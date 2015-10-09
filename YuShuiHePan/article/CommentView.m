@@ -9,10 +9,10 @@
 #import "CommentView.h"
 
 @implementation CommentView
-@synthesize aid;
 @synthesize postView;
 @synthesize textView;
 @synthesize sendButton;
+@synthesize delegate;
 
 - (instancetype)init{
     CGRect rect = [UIScreen mainScreen].bounds;
@@ -69,6 +69,7 @@
     self.sendButton.titleLabel.font = [UIFont fontWithName:DSXFontStyleDemilight size:14.0];
     [self.sendButton setTitle:@"发表" forState:UIControlStateNormal];
     [self.sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.sendButton addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.sendButton];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -91,9 +92,17 @@
 
 - (void)textViewDidChange:(UITextView *)textView{
     if (self.textView.text.length > 0) {
+        self.sendButton.tag = 1;
         self.sendButton.backgroundColor = [UIColor redColor];
     }else {
+        self.sendButton.tag = 0;
         self.sendButton.backgroundColor = [UIColor colorWithRed:0.70 green:0.70 blue:0.70 alpha:1.00];
+    }
+}
+
+- (void)sendComment{
+    if (sendButton.tag == 1) {
+        [self.delegate sendComment];
     }
 }
 

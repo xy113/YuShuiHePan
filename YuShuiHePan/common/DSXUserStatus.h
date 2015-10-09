@@ -22,6 +22,7 @@
 @property(nonatomic,strong)NSString *email;
 @property(nonatomic,strong)NSString *userpic;
 @property(nonatomic,retain)UIImage *avatar;
+@property(nonatomic,strong)NSString *signature;
 @property(nonatomic,strong)id<DSXUserStatusDelegate> delegate;
 
 - (instancetype)init;

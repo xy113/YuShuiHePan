@@ -19,5 +19,6 @@
 @property(nonatomic,assign)NSInteger catid;
 @property(nonatomic,retain)UITextField *titleTextField;
 @property(nonatomic,retain)UITextView *contentTextView;
+@property(nonatomic,retain)DSXUserStatus *userStatus;
 
 @end
