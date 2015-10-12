@@ -9,6 +9,12 @@
 #import "MyViewController.h"
 #import "DSXNavigationController.h"
 #import "LoginViewController.h"
+#import "MyArticleViewController.h"
+#import "MyLikeViewController.h"
+#import "MyFavoriteViewController.h"
+#import "MyMessageViewController.h"
+#import "FeedBackViewController.h"
+#import "AboutViewController.h"
 
 
 @interface MyViewController ()
@@ -76,15 +82,18 @@
     if (indexPath.section == 1) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (indexPath.row == 0) {
+            cell.imageView.image = [UIImage imageNamed:@"icon-mypub.png"];
             cell.textLabel.text = @"我发布的";
         }
         
         if (indexPath.row == 1) {
-            cell.textLabel.text = @"我关注的";
+            cell.imageView.image = [UIImage imageNamed:@"icon-myfavor.png"];
+            cell.textLabel.text = @"我收藏的";
         }
         
         if (indexPath.row == 2) {
-            cell.textLabel.text = @"我的收藏";
+            cell.imageView.image = [UIImage imageNamed:@"icon-mymessage.png"];
+            cell.textLabel.text = @"消息中心";
         }
     }
     if (indexPath.section == 2) {
@@ -124,6 +133,44 @@
     if (indexPath.section == 0) {
         if (!self.userStatus.isLogined) {
             [self showLogin];
+        }
+    }
+    
+    if (indexPath.section == 1) {
+        if (self.userStatus.isLogined) {
+            if (indexPath.row == 0) {
+                MyArticleViewController *myArticleView = [[MyArticleViewController alloc] init];
+                [self.navigationController pushViewController:myArticleView animated:YES];
+            }
+            
+            if (indexPath.row == 1) {
+                MyFavoriteViewController *favoriteView = [[MyFavoriteViewController alloc] init];
+                [self.navigationController pushViewController:favoriteView animated:YES];
+            }
+            
+            if (indexPath.row == 2) {
+                MyMessageViewController *messageView = [[MyMessageViewController alloc] init];
+                [self.navigationController pushViewController:messageView animated:YES];
+            }
+        
+        }else {
+            [self showLogin];
+        }
+    }
+    
+    if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            AboutViewController *aboutView = [[AboutViewController alloc] init];
+            [self.navigationController pushViewController:aboutView animated:YES];
+        }
+        
+        if (indexPath.row == 1) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.apple.com/cn/"]];
+        }
+        
+        if (indexPath.row == 2) {
+            FeedBackViewController *feedBack = [[FeedBackViewController alloc] init];
+            [self.navigationController pushViewController:feedBack animated:YES];
         }
     }
     
@@ -180,7 +227,12 @@
     detailLabel.font = [UIFont fontWithName:DSXFontStyleDemilight size:14.0];
     detailLabel.textColor = [UIColor grayColor];
     if (self.userStatus.isLogined) {
-        detailLabel.text = self.userStatus.signature;
+        if (self.userStatus.signature.length > 0) {
+            detailLabel.text = self.userStatus.signature;
+        }else {
+            detailLabel.text = @"没有设置个性签名";
+        }
+        
     }else {
         detailLabel.text = @"点击此处登录,享有更多特权";
     }

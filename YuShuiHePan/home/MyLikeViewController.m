@@ -1,16 +1,15 @@
 //
-//  MyArticleViewController.m
+//  MyLikeViewController.m
 //  YuShuiHePan
 //
-//  Created by songdewei on 15/10/9.
+//  Created by songdewei on 15/10/12.
 //  Copyright © 2015年 yushuihepan. All rights reserved.
 //
 
-#import "MyArticleViewController.h"
+#import "MyLikeViewController.h"
 #import "DetailViewController.h"
 
-@implementation MyArticleViewController
-
+@implementation MyLikeViewController
 @synthesize mainTableView;
 @synthesize userStatus;
 @synthesize operationQueue;
@@ -18,18 +17,18 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self setTitle:@"我发布的"];
+    [self setTitle:@"我喜欢的"];
     self.navigationItem.leftBarButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleBack target:self action:@selector(back)];
-    //self.navigationItem.rightBarButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleAdd target:self action:@selector(addnew)];
     self.userStatus = [[DSXUserStatus alloc] init];
     
     CGRect frame = self.view.frame;
+    frame.size.height = frame.size.height - 108;
     self.mainTableView = [[DSXTableView alloc] initWithFrame:frame];
     self.mainTableView.tableViewDelegate = self;
     self.mainTableView.pageSize = 20;
     [self.view addSubview:self.mainTableView];
     
-    self.tableViewData = [[NSUserDefaults standardUserDefaults] dataForKey:@"myArticle"];
+    self.tableViewData = [[NSUserDefaults standardUserDefaults] dataForKey:@"myLike"];
     [self.mainTableView reloadTableViewWithData:self.tableViewData];
     
     self.operationQueue = [[NSOperationQueue alloc] init];
@@ -41,13 +40,9 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)addnew{
-    
-}
-
 - (void)downloadData{
     [self.operationQueue addOperationWithBlock:^{
-        NSString *urlString = [SITEAPI stringByAppendingFormat:@"&ac=my&op=article&uid=%ld&page=%d",(long)self.userStatus.uid,_page];
+        NSString *urlString = [SITEAPI stringByAppendingFormat:@"&ac=my&op=like&uid=%ld&page=%d",(long)self.userStatus.uid,_page];
         self.tableViewData = [[DSXUtil sharedUtil] dataWithURL:urlString];
         [self performSelectorOnMainThread:@selector(reloadTableView) withObject:nil waitUntilDone:YES];
     }];
@@ -55,7 +50,7 @@
 
 - (void)reloadTableView{
     if ([self.tableViewData length] > 2 && self.mainTableView.isRefreshing) {
-        [[NSUserDefaults standardUserDefaults] setObject:self.tableViewData forKey:@"myArticle"];
+        [[NSUserDefaults standardUserDefaults] setObject:self.tableViewData forKey:@"myLike"];
     }
     [self.mainTableView reloadTableViewWithData:self.tableViewData];
 }
@@ -69,7 +64,7 @@
 
 - (void)tableViewEndRefreshing{
     if ([self.tableViewData length] < 3) {
-        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDefault Message:@"你还没有发表过文章"];
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDefault Message:@"暂无信息"];
     }
 }
 
@@ -83,9 +78,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"myArticleCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"myLikeCell"];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"myArticleCell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"myLikeCell"];
     }
     NSDictionary *article = [self.mainTableView.rows objectAtIndex:indexPath.row];
     cell.textLabel.text = [article objectForKey:@"title"];

@@ -134,4 +134,10 @@
     return popView;
 }
 
+- (void)showLoginFromViewController:(UIViewController *)controller{
+    LoginViewController *loginView = [[LoginViewController alloc] init];
+    DSXNavigationController *nav = [[DSXNavigationController alloc] initWithRootViewController:loginView];
+    [controller presentViewController:nav animated:YES completion:nil];
+}
+
 @end

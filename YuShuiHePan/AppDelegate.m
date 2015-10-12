@@ -12,6 +12,11 @@
 #import "MyViewController.h"
 #import "DSXNavigationController.h"
 #import "Config.h"
+#import <ShareSDK/ShareSDK.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentOAuth.h>
+#import "WXApi.h"
+#import "WeiboSDK.h"
 
 @interface AppDelegate ()
 
@@ -26,6 +31,47 @@
     self.window.backgroundColor = BGCOLOR;
     
     [NSThread sleepForTimeInterval:2];
+    
+    [ShareSDK registerApp:ShareAppKey];//字符串api20为您的ShareSDK的AppKey
+    
+    //添加新浪微博应用 注册网址 http://open.weibo.com
+//    [ShareSDK connectSinaWeiboWithAppKey:@"568898243"
+//                               appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
+//                             redirectUri:@"http://www.sharesdk.cn"];
+    //当使用新浪微博客户端分享的时候需要按照下面的方法来初始化新浪的平台
+    [ShareSDK  connectSinaWeiboWithAppKey:@"568898243"
+                                appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
+                              redirectUri:@"http://www.sharesdk.cn"
+                              weiboSDKCls:[WeiboSDK class]];
+    
+    //添加腾讯微博应用 注册网址 http://dev.t.qq.com
+    [ShareSDK connectTencentWeiboWithAppKey:@"801307650"
+                                  appSecret:@"ae36f4ee3946e1cbb98d6965b0b2ff5c"
+                                redirectUri:@"http://www.sharesdk.cn"];
+    
+    //添加QQ空间应用  注册网址  http://connect.qq.com/intro/login/
+    [ShareSDK connectQZoneWithAppKey:@"100371282"
+                           appSecret:@"aed9b0303e3ed1e27bae87c33761161d"
+                   qqApiInterfaceCls:[QQApiInterface class]
+                     tencentOAuthCls:[TencentOAuth class]];
+    
+    //添加QQ应用  注册网址   http://mobile.qq.com/api/
+    [ShareSDK connectQQWithQZoneAppKey:@"100371282"
+                     qqApiInterfaceCls:[QQApiInterface class]
+                       tencentOAuthCls:[TencentOAuth class]];
+    
+    //微信登陆的时候需要初始化
+    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885"
+                           appSecret:@"64020361b8ec4c99936c0e3999a9f249"
+                           wechatCls:[WXApi class]];
+    //短信
+    [ShareSDK connectSMS];
+    //邮件
+    [ShareSDK connectMail];
+    //复制
+    [ShareSDK connectCopy];
+    
+    
     HomeViewController *homeController = [[HomeViewController alloc] init];
     DSXNavigationController *navHome = [[DSXNavigationController alloc] initWithRootViewController:homeController];
     [navHome setTabBarItem:[self tabBarItemWithTitle:@"玉水文学" image:@"icon-collect.png" selectedImage:@"icon-collectfill.png"]];

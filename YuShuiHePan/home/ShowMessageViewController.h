@@ -1,8 +1,8 @@
 //
-//  WxyhPlayViewController.h
+//  ShowMessageViewController.h
 //  YuShuiHePan
 //
-//  Created by songdewei on 15/9/29.
+//  Created by songdewei on 15/10/12.
 //  Copyright © 2015年 yushuihepan. All rights reserved.
 //
 
@@ -10,12 +10,9 @@
 #import "DSXCommon.h"
 #import "DSXUserStatus.h"
 
-@interface WxyhPlayViewController : UIViewController{
-    
-}
+@interface ShowMessageViewController : UIViewController
 
-@property(nonatomic,assign)NSInteger ID;
-@property(nonatomic,strong)NSString *articleTitle;
+@property(nonatomic,assign)NSInteger mid;
 @property(nonatomic,retain)UIWebView *webView;
 @property(nonatomic,retain)DSXUserStatus *userStatus;
 

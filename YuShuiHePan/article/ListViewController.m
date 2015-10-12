@@ -117,6 +117,7 @@
     [cell setSelected:NO animated:YES];
     DetailViewController *detailController = [[DetailViewController alloc] init];
     detailController.aid = cell.tag;
+    detailController.articleTitle = cell.textLabel.text;
     detailController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:detailController animated:YES];
 }

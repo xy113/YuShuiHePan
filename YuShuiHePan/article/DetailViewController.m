@@ -9,9 +9,12 @@
 #import "DetailViewController.h"
 #import "DSXNavigationController.h"
 #import "LoginViewController.h"
+#import "DSXShare.h"
 
 @implementation DetailViewController
 @synthesize aid;
+@synthesize articleTitle;
+@synthesize articleData;
 @synthesize scrollVew;
 @synthesize contentWebView;
 @synthesize commentWebView;
@@ -21,10 +24,9 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:BGCOLOR];
     self.navigationItem.leftBarButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleBack target:self action:@selector(back)];
-    UIBarButtonItem *shareButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleShare target:self action:nil];
-    UIBarButtonItem *likeButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleLike target:self action:nil];
-    UIBarButtonItem *favorButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleFavorite target:self action:nil];
-    self.navigationItem.rightBarButtonItems = @[shareButtonItem,favorButtonItem,likeButtonItem];
+    UIBarButtonItem *shareButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleShare target:self action:@selector(showShare)];
+    UIBarButtonItem *favorButtonItem = [[DSXUI sharedUI] barButtonWithStyle:DSXBarButtonStyleFavorite target:self action:@selector(addFavorite)];
+    self.navigationItem.rightBarButtonItems = @[shareButtonItem,favorButtonItem];
     
     self.userStatus = [[DSXUserStatus alloc] init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userStatusChanged) name:UserStatusChangedNotification object:nil];
@@ -35,6 +37,7 @@
     self.scrollVew.pagingEnabled = YES;
     self.scrollVew.contentSize = CGSizeMake(frame.size.width*2, 0);
     self.scrollVew.delegate = self;
+    self.scrollVew.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:self.scrollVew];
     
     NSURLRequest *request;
@@ -106,13 +109,45 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)addLike{
+    
+}
+
+- (void)addFavorite{
+    if (self.userStatus.isLogined) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:@(self.userStatus.uid) forKey:@"uid"];
+        [params setObject:@"aid" forKey:@"idtype"];
+        [params setObject:@(self.aid) forKey:@"id"];
+        [params setObject:self.articleTitle forKey:@"title"];
+        [[DSXUtil sharedUtil] addFavoriteWithParams:params];
+        
+    }else {
+        [self showLogin];
+    }
+}
+
+- (void)showShare{
+    NSDictionary *article = self.articleData;
+    DSXShare *share = [[DSXShare alloc] init];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:[article objectForKey:@"summary"] forKey:@"content"];
+    [params setObject:[article objectForKey:@"pic"] forKey:@"image"];
+    [params setObject:[article objectForKey:@"title"] forKey:@"title"];
+    [params setObject:[article objectForKey:@"url"] forKey:@"url"];
+    [params setObject:[article objectForKey:@"summary"] forKey:@"description"];
+    [share showActionSheetInView:self.view Params:params];
+}
+
+- (void)showLogin{
+    [[DSXUI sharedUI] showLoginFromViewController:self];
+}
+
 - (void)showCommentView{
     if (self.userStatus.isLogined) {
         [self.commentView show];
     }else {
-        LoginViewController *loginView = [[LoginViewController alloc] init];
-        DSXNavigationController *nav = [[DSXNavigationController alloc] initWithRootViewController:loginView];
-        [self presentViewController:nav animated:YES completion:nil];
+        [self showLogin];
     }
 }
 
@@ -139,7 +174,12 @@
 #pragma mark - webView delegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     if (webView == self.contentWebView) {
-        NSString *stringNum = [webView stringByEvaluatingJavaScriptFromString:@"getCommentNum()"];
+        NSString *json = [self.contentWebView stringByEvaluatingJavaScriptFromString:@"getArticle()"];
+        id article = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
+        if ([article isKindOfClass:[NSDictionary class]]) {
+            self.articleData = article;
+        }
+        NSString *stringNum = [self.articleData objectForKey:@"commentnum"];
         [commButton setTitle:stringNum forState:UIControlStateNormal];
         commentNum = [stringNum intValue];
     }
@@ -150,7 +190,7 @@
 
 - (void)sendComment{
     NSString *message = self.commentView.textView.text;
-    if (message.length > 2) {
+    if (message.length > 0) {
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setObject:@(self.aid) forKey:@"id"];
         [params setObject:@"aid" forKey:@"idtype"];
@@ -159,7 +199,7 @@
         [params setObject:message forKey:@"message"];
         NSData *data = [[DSXUtil sharedUtil] sendDataForURL:[SITEAPI stringByAppendingString:@"&ac=comment&op=save"] params:params];
         NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        if ([result isEqualToString:@"1"]) {
+        if ([result intValue] > 0) {
             commentNum++;
             NSString *title = [NSString stringWithFormat:@"%ld",(long)commentNum];
             [commButton setTitle:title forState:UIControlStateNormal];

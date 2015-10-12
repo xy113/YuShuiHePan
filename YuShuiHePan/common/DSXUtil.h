@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Config.h"
+#import "DSXUI.h"
 
 @interface DSXUtil : NSObject
 
@@ -14,5 +16,6 @@
 
 - (NSData *)dataWithURL:(NSString *)urlString;
 - (NSData *)sendDataForURL:(NSString *)urlString params:(NSMutableDictionary *)params;
+- (void)addFavoriteWithParams:(NSMutableDictionary *)params;
 
 @end

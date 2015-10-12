@@ -43,4 +43,11 @@
     return [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
 }
 
+- (void)addFavoriteWithParams:(NSMutableDictionary *)params{
+    NSData *data = [self sendDataForURL:[SITEAPI stringByAppendingString:@"&ac=misc&op=addfavorite"] params:params];
+    if ([data length] > 0) {
+        [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDone Message:@"收藏成功"];
+    }
+}
+
 @end

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "DSXNavigationController.h"
+#import "LoginViewController.h"
 
 typedef enum {
     DSXBarButtonStyleBack,
@@ -25,6 +27,7 @@ typedef NS_ENUM(NSInteger,DSXPopViewStyle){
     DSXPopViewStyleError
 };
 
+
 @interface DSXUI : NSObject
 
 + (instancetype)sharedUI;
@@ -34,6 +37,7 @@ typedef NS_ENUM(NSInteger,DSXPopViewStyle){
 
 - (void)showPopViewWithStyle:(DSXPopViewStyle)style Message:(NSString *)message;
 - (UIView *)showLoadingViewWithMessage:(NSString *)message;
+- (void)showLoginFromViewController:(UIViewController *)controller;
 
 
 @end

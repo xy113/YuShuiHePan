@@ -21,3 +21,8 @@
 #define SITEAPI @"http://yushuihepan.com/?mod=app"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed: ((float)((rgbValue & 0xFF0000) >> 16)) / 255.0 green: ((float)((rgbValue & 0xFF00) >> 8)) / 255.0 blue: ((float)(rgbValue & 0xFF)) / 255.0 alpha: 1.0]
+
+//ShareSDK 接口配置
+#define ShareAppName @"掌上黔南"
+#define ShareAppKey @"9d158b5a6178"
+#define ShareAppSecret @"59e46c696539877c9db235fae1a9253c"

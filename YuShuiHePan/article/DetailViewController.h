@@ -17,6 +17,8 @@
 }
 
 @property(nonatomic,assign)NSInteger aid;
+@property(nonatomic,strong)NSString *articleTitle;
+@property(nonatomic,strong)NSDictionary *articleData;
 @property(nonatomic,retain)UIScrollView *scrollVew;
 @property(nonatomic,retain)UIWebView *contentWebView;
 @property(nonatomic,retain)UIWebView *commentWebView;
