@@ -161,6 +161,7 @@
     if (indexPath.section == 2) {
         if (indexPath.row == 0) {
             AboutViewController *aboutView = [[AboutViewController alloc] init];
+            [aboutView setHidesBottomBarWhenPushed:YES];
             [self.navigationController pushViewController:aboutView animated:YES];
         }
         

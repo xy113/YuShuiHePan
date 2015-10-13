@@ -12,7 +12,6 @@
 
 @interface PublishViewController : UIViewController<UITextFieldDelegate,UITextViewDelegate>{
     @private
-    CGRect _viewFrame;
     UILabel *_contentPlaceHolder;
 }
 

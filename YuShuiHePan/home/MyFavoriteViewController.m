@@ -64,7 +64,7 @@
 }
 
 - (void)tableViewEndRefreshing{
-    if ([self.tableViewData length] < 3) {
+    if ([self.mainTableView.rows count] == 0) {
         [[DSXUI sharedUI] showPopViewWithStyle:DSXPopViewStyleDefault Message:@"暂无信息"];
     }
 }

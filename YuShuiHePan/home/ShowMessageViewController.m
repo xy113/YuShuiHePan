@@ -26,7 +26,7 @@
     NSData *data = [[DSXUtil sharedUtil] dataWithURL:[SITEAPI stringByAppendingFormat:@"&ac=my&op=getmessage&uid=%ld&mid=%ld",(long)self.userStatus.uid,(long)self.mid]];
     id message = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     if ([message isKindOfClass:[NSDictionary class]]) {
-        NSString *html = @"<article style=\"font-size:18px; line-height:1.5; padding:0 5px;\">";
+        NSString *html = @"<article style=\"font-size:16px; line-height:1.5; padding:0 5px;\">";
         html = [html stringByAppendingFormat:@"<p>%@</p>",[message objectForKey:@"message"]];
         html = [html stringByAppendingFormat:@"<p>%@</p>",[message objectForKey:@"dateline"]];
         html = [html stringByAppendingString:@"</article>"];
